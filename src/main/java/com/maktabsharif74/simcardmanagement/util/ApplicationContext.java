@@ -3,15 +3,19 @@ package com.maktabsharif74.simcardmanagement.util;
 import com.maktabsharif74.simcardmanagement.repository.AdminRepository;
 import com.maktabsharif74.simcardmanagement.repository.CustomerRepository;
 import com.maktabsharif74.simcardmanagement.repository.FamiliarityMethodRepository;
+import com.maktabsharif74.simcardmanagement.repository.SimCardRepository;
 import com.maktabsharif74.simcardmanagement.repository.impl.AdminRepositoryImpl;
 import com.maktabsharif74.simcardmanagement.repository.impl.CustomerRepositoryImpl;
 import com.maktabsharif74.simcardmanagement.repository.impl.FamiliarityMethodRepositoryImpl;
+import com.maktabsharif74.simcardmanagement.repository.impl.SimCardRepositoryImpl;
 import com.maktabsharif74.simcardmanagement.service.AdminService;
 import com.maktabsharif74.simcardmanagement.service.CustomerService;
 import com.maktabsharif74.simcardmanagement.service.FamiliarityMethodService;
+import com.maktabsharif74.simcardmanagement.service.SimCardService;
 import com.maktabsharif74.simcardmanagement.service.impl.AdminServiceImpl;
 import com.maktabsharif74.simcardmanagement.service.impl.CustomerServiceImpl;
 import com.maktabsharif74.simcardmanagement.service.impl.FamiliarityMethodServiceImpl;
+import com.maktabsharif74.simcardmanagement.service.impl.SimCardServiceImpl;
 
 import javax.persistence.EntityManager;
 
@@ -30,6 +34,10 @@ public class ApplicationContext {
     private static AdminRepository adminRepository;
 
     private static AdminService adminService;
+
+    private static SimCardRepository simCardRepository;
+
+    private static SimCardService simCardService;
 
     private ApplicationContext() {
     }
@@ -74,5 +82,19 @@ public class ApplicationContext {
             adminService = new AdminServiceImpl(getAdminRepository());
         }
         return adminService;
+    }
+
+    public static SimCardRepository getSimCardRepository() {
+        if (simCardRepository == null) {
+            simCardRepository = new SimCardRepositoryImpl(em);
+        }
+        return simCardRepository;
+    }
+
+    public static SimCardService getSimCardService() {
+        if (simCardService == null) {
+            simCardService = new SimCardServiceImpl(getSimCardRepository());
+        }
+        return simCardService;
     }
 }
