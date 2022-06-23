@@ -6,7 +6,6 @@ import com.maktabsharif74.simcardmanagement.repository.CustomerRepository;
 
 import javax.persistence.EntityManager;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer, Long>
@@ -56,7 +55,6 @@ public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer, Long>
 
     @Override
     public List<Customer> findAllByCreateDateGreaterThan(ZonedDateTime createDate) {
-        new Date().after
         return entityManager.createQuery(
                 "select c from Customer c where c.createDate > :createDate",
                 Customer.class
