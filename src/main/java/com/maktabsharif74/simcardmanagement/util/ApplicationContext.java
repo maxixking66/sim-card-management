@@ -1,11 +1,15 @@
 package com.maktabsharif74.simcardmanagement.util;
 
+import com.maktabsharif74.simcardmanagement.repository.AdminRepository;
 import com.maktabsharif74.simcardmanagement.repository.CustomerRepository;
 import com.maktabsharif74.simcardmanagement.repository.FamiliarityMethodRepository;
+import com.maktabsharif74.simcardmanagement.repository.impl.AdminRepositoryImpl;
 import com.maktabsharif74.simcardmanagement.repository.impl.CustomerRepositoryImpl;
 import com.maktabsharif74.simcardmanagement.repository.impl.FamiliarityMethodRepositoryImpl;
+import com.maktabsharif74.simcardmanagement.service.AdminService;
 import com.maktabsharif74.simcardmanagement.service.CustomerService;
 import com.maktabsharif74.simcardmanagement.service.FamiliarityMethodService;
+import com.maktabsharif74.simcardmanagement.service.impl.AdminServiceImpl;
 import com.maktabsharif74.simcardmanagement.service.impl.CustomerServiceImpl;
 import com.maktabsharif74.simcardmanagement.service.impl.FamiliarityMethodServiceImpl;
 
@@ -22,6 +26,10 @@ public class ApplicationContext {
     private static CustomerRepository customerRepository;
 
     private static CustomerService customerService;
+
+    private static AdminRepository adminRepository;
+
+    private static AdminService adminService;
 
     private ApplicationContext() {
     }
@@ -52,5 +60,19 @@ public class ApplicationContext {
             customerService = new CustomerServiceImpl(getCustomerRepository());
         }
         return customerService;
+    }
+
+    public static AdminRepository getAdminRepository() {
+        if (adminRepository == null) {
+            adminRepository = new AdminRepositoryImpl(em);
+        }
+        return adminRepository;
+    }
+
+    public static AdminService getAdminService() {
+        if (adminService == null) {
+            adminService = new AdminServiceImpl(getAdminRepository());
+        }
+        return adminService;
     }
 }
