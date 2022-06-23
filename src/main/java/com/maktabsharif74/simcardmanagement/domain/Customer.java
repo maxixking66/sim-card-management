@@ -15,7 +15,7 @@ public class Customer extends User {
     @JoinColumn(name = FAMILIARITY_METHOD_ID)
     private FamiliarityMethod familiarityMethod;
 
-    @Column(name = CODE)
+    @Column(name = CODE, unique = true)
     private String code;
 
     public Customer() {
