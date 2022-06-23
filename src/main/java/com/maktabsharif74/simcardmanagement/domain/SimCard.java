@@ -25,6 +25,7 @@ public class SimCard extends BaseEntity<Long> {
     public static final String STATUS = "status";
     public static final String SIM_CARD_RONDS = "sim_card_ronds";
     public static final String SIM_CARD_ID = "sim_card_id";
+    public static final String ROND_TYPE = "rond_type";
     public static final String MIN_PRICE = "min_price";
     public static final String MAX_PRICE = "max_price";
 
@@ -54,6 +55,8 @@ public class SimCard extends BaseEntity<Long> {
 
     @ElementCollection
     @CollectionTable(name = SIM_CARD_RONDS, joinColumns = @JoinColumn(name = SIM_CARD_ID))
+    @Column(name = ROND_TYPE)
+    @Enumerated(EnumType.STRING)
     private Set<RondType> rondTypes = new HashSet<>();
 
     @Column(name = MIN_PRICE)
