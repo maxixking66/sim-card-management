@@ -18,6 +18,8 @@ public class Customer extends User {
     @Column(name = CODE, unique = true)
     private String code;
 
+    public String test;
+
     public Customer() {
     }
 
@@ -35,5 +37,14 @@ public class Customer extends User {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + getId() + '\'' + "," +
+                "createDate='" + getCreateDate() + '\'' + "," +
+                "code='" + code + '\'' +
+                '}';
     }
 }
