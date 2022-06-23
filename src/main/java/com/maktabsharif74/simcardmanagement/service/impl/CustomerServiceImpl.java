@@ -4,6 +4,7 @@ import com.maktabsharif74.simcardmanagement.base.service.impl.BaseServiceImpl;
 import com.maktabsharif74.simcardmanagement.domain.Customer;
 import com.maktabsharif74.simcardmanagement.repository.CustomerRepository;
 import com.maktabsharif74.simcardmanagement.service.CustomerService;
+import com.maktabsharif74.simcardmanagement.util.RandomUtil;
 
 public class CustomerServiceImpl
         extends BaseServiceImpl<Customer, Long, CustomerRepository>
@@ -11,6 +12,24 @@ public class CustomerServiceImpl
 
     public CustomerServiceImpl(CustomerRepository repository) {
         super(repository);
+    }
+
+    @Override
+    public Customer save(Customer customer) {
+        if (customer.getId() == null) {
+            setCode(customer);
+        }
+        return super.save(customer);
+    }
+
+    private void setCode(Customer customer) {
+        String code = RandomUtil.getRandomNumeric(8);
+        while (repository.existsByCode(code)) {
+            code = RandomUtil.getRandomNumeric(8);
+        }
+        customer.setCode(
+                code
+        );
     }
 
 }

@@ -5,4 +5,6 @@ import com.maktabsharif74.simcardmanagement.domain.Customer;
 
 public interface CustomerRepository extends BaseRepository<Customer, Long> {
 
+    boolean existsByCode(String code);
+
 }
