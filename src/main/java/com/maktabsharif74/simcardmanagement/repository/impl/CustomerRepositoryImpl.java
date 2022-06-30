@@ -2,12 +2,15 @@ package com.maktabsharif74.simcardmanagement.repository.impl;
 
 import com.maktabsharif74.simcardmanagement.base.repository.impl.BaseRepositoryImpl;
 import com.maktabsharif74.simcardmanagement.domain.Customer;
+import com.maktabsharif74.simcardmanagement.domain.FamiliarityMethod;
 import com.maktabsharif74.simcardmanagement.repository.CustomerRepository;
 import com.maktabsharif74.simcardmanagement.service.dto.CustomerSearch;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer, Long>
@@ -71,6 +74,13 @@ public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer, Long>
                 ).setParameter("fromDate", fromDate)
                 .setParameter("toDate", toDate)
                 .getResultList();
+    }
+
+    public FamiliarityMethod getMethodByCustomerId(Long customerId) {
+        return entityManager.createQuery(
+                "select c from Customer c where c.id = :id",
+                FamiliarityMethod.class
+        ).setParameter("id", customerId).getSingleResult();
     }
 
     @Override
@@ -142,5 +152,136 @@ public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer, Long>
         }
 
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<Customer> findAllWithCriteria(CustomerSearch customerSearch) {
+//        select c from Customer c where c.firstName
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Customer> criteriaQuery = criteriaBuilder.createQuery(Customer.class);
+//      from Customer c
+//        root = c                          from Customer
+        Root<Customer> root = criteriaQuery.from(Customer.class);
+//        criteriaQuery.select(root);
+
+
+////        where   field  operator  value
+////        root.get("firstName") = c.firstName
+//        criteriaQuery.where(
+////                              operator
+//                criteriaBuilder.equal(
+////                        field                 value
+//                        root.get("firstName"), "mohsen"
+//                )
+//        );
+
+        List<Predicate> predicates = new ArrayList<>();
+        addFirstNamePredicate(predicates, root, criteriaBuilder, customerSearch.getFirstName());
+        addLastNamePredicate(predicates, root, criteriaBuilder, customerSearch.getLastName());
+        addIsActivePredicate(predicates, root, criteriaBuilder, customerSearch.getActive());
+        addUsernamePredicate(predicates, root, criteriaBuilder, customerSearch.getUsername());
+        addCodePredicate(predicates, root, criteriaBuilder, customerSearch.getCode());
+        addFamiliarityMethodPredicate(predicates, root, criteriaBuilder,
+                customerSearch.getFamiliarityMethodId());
+
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        predicates.toArray(
+                                new Predicate[0]
+                        )
+                )
+        );
+
+        return entityManager.createQuery(criteriaQuery).getResultList();
+    }
+
+    private void addFamiliarityMethodPredicate(List<Predicate> predicates, Root<Customer> root,
+                                               CriteriaBuilder criteriaBuilder, Long familiarityMethodId) {
+        if (familiarityMethodId != null) {
+            predicates.add(
+                    criteriaBuilder.equal(
+//                            c.familiarityMethod.id
+//                            c.familiarityMethod -> root.get("familiarityMethod")
+//                            c.familiarityMethod.id -> root.get("familiarityMethod").get("id")
+                            root.get("familiarityMethod").get("id"), familiarityMethodId
+                    )
+            );
+        }
+    }
+
+    private void addCodePredicate(List<Predicate> predicates, Root<Customer> root,
+                                  CriteriaBuilder criteriaBuilder, String code) {
+        if (code != null && !code.isEmpty()) {
+            predicates.add(
+                    criteriaBuilder.like(
+                            root.get("code"), "%" + code + "%"
+                    )
+            );
+        }
+    }
+
+    private void addUsernamePredicate(List<Predicate> predicates, Root<Customer> root,
+                                      CriteriaBuilder criteriaBuilder, String username) {
+        if (username != null && !username.isEmpty()) {
+            predicates.add(
+                    criteriaBuilder.like(
+                            root.get("username"), "%" + username + "%"
+                    )
+            );
+        }
+    }
+
+    private void addIsActivePredicate(List<Predicate> predicates, Root<Customer> root,
+                                      CriteriaBuilder criteriaBuilder, Boolean active) {
+        if (active != null) {
+            if (active) {
+                predicates.add(
+                        criteriaBuilder.isTrue(
+                                root.get("isActive")
+                        )
+                );
+            } else {
+                predicates.add(
+                        criteriaBuilder.or(
+                                criteriaBuilder.isFalse(root.get("isActive")),
+                                criteriaBuilder.isNull(root.get("isActive"))
+                        )
+                );
+            }
+        }
+    }
+
+    private void addLastNamePredicate(List<Predicate> predicates, Root<Customer> root,
+                                      CriteriaBuilder criteriaBuilder, String lastName) {
+        if (lastName != null && !lastName.isEmpty()) {
+            predicates.add(
+                    criteriaBuilder.like(
+                            root.get("lastName"), "%" + lastName + "%"
+                    )
+            );
+        }
+    }
+
+    private void addFirstNamePredicate(List<Predicate> predicates, Root<Customer> root,
+                                       CriteriaBuilder criteriaBuilder, String firstName) {
+        if (firstName != null && !firstName.isEmpty()) {
+
+            ////        where   field  operator  value and field2  operator2  value2
+            Path<String> field = root.get("firstName");
+            Predicate predicate = criteriaBuilder.like(
+                    field, "%" + firstName + "%"
+            );
+            predicates.add(predicate);
+
+            /*predicates.add(
+                    criteriaBuilder.like(
+                            root.get("firstName"),
+                            "%" + firstName + "%"
+                    )
+            );*/
+
+        }
     }
 }

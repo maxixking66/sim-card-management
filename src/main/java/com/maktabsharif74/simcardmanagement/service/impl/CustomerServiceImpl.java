@@ -42,4 +42,9 @@ public class CustomerServiceImpl
         }
         return repository.findAll(customerSearch);
     }
+
+    @Override
+    public List<Customer> findAllWithCriteria(CustomerSearch customerSearch) {
+        return repository.findAllWithCriteria(customerSearch);
+    }
 }

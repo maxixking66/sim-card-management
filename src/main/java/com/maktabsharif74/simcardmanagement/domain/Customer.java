@@ -18,6 +18,8 @@ public class Customer extends User {
     @Column(name = CODE, unique = true)
     private String code;
 
+    private Boolean isActive;
+
     public String test;
 
     public Customer() {

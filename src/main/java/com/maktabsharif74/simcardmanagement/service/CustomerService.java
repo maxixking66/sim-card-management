@@ -10,4 +10,6 @@ public interface CustomerService extends BaseService<Customer, Long> {
 
     List<Customer> findAll(CustomerSearch customerSearch);
 
+    List<Customer> findAllWithCriteria(CustomerSearch customerSearch);
+
 }

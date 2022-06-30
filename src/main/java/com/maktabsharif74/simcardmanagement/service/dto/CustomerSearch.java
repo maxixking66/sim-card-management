@@ -7,6 +7,7 @@ public class CustomerSearch {
     private String username;
     private String code;
     private Long familiarityMethodId;
+    private Boolean isActive;
 
     public String getFirstName() {
         return firstName;
@@ -46,5 +47,13 @@ public class CustomerSearch {
 
     public void setFamiliarityMethodId(Long familiarityMethodId) {
         this.familiarityMethodId = familiarityMethodId;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

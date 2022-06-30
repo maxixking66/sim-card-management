@@ -22,4 +22,6 @@ public interface CustomerRepository extends BaseRepository<Customer, Long> {
     List<Customer> findAllByCreateDateIsBetween(ZonedDateTime fromDate, ZonedDateTime toDate);
 
     List<Customer> findAll(CustomerSearch customerSearch);
+
+    List<Customer> findAllWithCriteria(CustomerSearch customerSearch);
 }
