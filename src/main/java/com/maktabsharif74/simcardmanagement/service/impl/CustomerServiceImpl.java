@@ -4,7 +4,10 @@ import com.maktabsharif74.simcardmanagement.base.service.impl.BaseServiceImpl;
 import com.maktabsharif74.simcardmanagement.domain.Customer;
 import com.maktabsharif74.simcardmanagement.repository.CustomerRepository;
 import com.maktabsharif74.simcardmanagement.service.CustomerService;
+import com.maktabsharif74.simcardmanagement.service.dto.CustomerSearch;
 import com.maktabsharif74.simcardmanagement.util.RandomUtil;
+
+import java.util.List;
 
 public class CustomerServiceImpl
         extends BaseServiceImpl<Customer, Long, CustomerRepository>
@@ -32,4 +35,11 @@ public class CustomerServiceImpl
         );
     }
 
+    @Override
+    public List<Customer> findAll(CustomerSearch customerSearch) {
+        if (customerSearch == null) {
+            return repository.findAll();
+        }
+        return repository.findAll(customerSearch);
+    }
 }
