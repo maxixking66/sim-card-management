@@ -194,6 +194,15 @@ public class CustomerRepositoryImpl extends BaseRepositoryImpl<Customer, Long>
                 )
         );
 
+        criteriaQuery.orderBy(
+//                order by field direction   -> order by c.createDate desc
+
+//                              direction
+                criteriaBuilder.desc(
+                        root.get("createDate")
+                )
+        );
+
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
